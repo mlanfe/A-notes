@@ -1,0 +1,37 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>使图片中间始终居中显示</title>
+</head>
+<style>
+  body{
+    margin: 0;
+  }
+  .box{
+    overflow: hidden;
+    min-width: 1000px;
+  }
+
+    /* 要想图片居中显示,图片的向左偏移量=(图片宽度-div的宽度)*0.5=0.5图片宽度-0.5div的宽度 */
+    /* margin按百分数取值时,时相对于父元素的宽度计算,所以图像的向左偏移量=0.5图片宽度+(-margin:50% )*/
+  
+  img{
+    position: relative;
+
+    /* 图片向左移动0.5*图片宽度 */
+    /* 如果未来存在改变图片的可能,图片的一半就应该动态取值:transform:translate(-50%) */
+    /* transform:translate(-50%); */
+    left:-900px;
+
+    /* 向左偏移(-margin:50%)就是图片向右移动margin:50% */
+    margin-left: 50%;
+  }
+</style>
+<body>
+  <div class="box">
+    <img src="./img/mhxy.png" alt="">
+  </div>
+</body>
+</html>

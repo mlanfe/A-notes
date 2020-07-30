@@ -1,0 +1,61 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Document</title>
+</head>
+<body>
+  <div id="app">
+    <cpn>
+      <!-- 作用域插槽 -->
+      <!-- 在父组件中使用作用域插槽,外部必须有一个包裹元素,来获取子组件中的数据 ,
+           这个包裹元素可以是普通html元素,也可以是<template>标签-->
+
+      <!-- 作用域插槽的使用方法一: -->
+      <!-- v-slot:slota引用的具名插槽不支持驼峰命名 -->
+      <template  v-slot:slota="slotProps">
+          <div  v-for="(item) in slotProps.movies">{{item}}</div>
+      </template>
+      <!-- 作用域插槽的使用方法二: 已经被废弃 -->
+      <div slot='slotB' slot-scope="slotProps">
+        <div  v-for="(item) in slotProps.person">{{item}}</div>
+      </div>
+    </cpn>
+  </div>
+
+  <template id="componentA">
+    <!-- template内部也必须有一个根元素来包裹 -->
+    <div>
+      <div>组件模板</div>
+      <!-- 绑定数据的属性名是自定义的, 以便在父组件中通过这个属性名引用到数据,
+           这个属性名不需要再子组件中注册 -->
+      <slot name="slota" :movies="movies"></slot>
+      <slot name="slotB" :person="person"></slot>
+    </div>
+  </template>
+  
+  <script src="./VUE.js"></script>
+  <script>
+    var cpn = {
+      template:"#componentA",
+      data(){
+        return {
+          movies:["星际穿越","机器人总动员"],
+          person:["amy","jack","bess"]
+        }
+      }
+    }
+    const app = new Vue({
+      el:"#app",
+      data:{
+        arr:["a","b","c"]
+      },
+      components:{
+        cpn  //cpn组件的内容必须定义在父组件的前面,否则父组件引用不到
+      }
+    })
+    
+  </script>
+</body>
+</html>

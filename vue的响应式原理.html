@@ -1,0 +1,96 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Document</title>
+</head>
+<body>
+  
+  <div id='app'>
+    {{message}}
+    {{name}}
+  </div>
+
+  <script>
+    const obj = {
+        message: '哈哈哈',
+        name: '测试',
+        age: 10
+    }
+    Object.keys(obj).forEach(key => {
+      let value = obj[key]
+      Object.defineProperty(obj, key, {
+        get(){
+          console.log('监听访问obj')
+          //用类似于以下的代码,来记录谁使用了这个属性
+          //1. 使用这个属性的对象就是 '订阅者'.  
+               //在解析html时,会访问vue实例的属性,从而调用被使用属性的get函数,
+               //而调用该函数, 就会在内部创建该属性的订阅者. w1就是订阅者.
+          //2. 记录这个属性的对象就是'发布者'.
+              //发布者记录了这个属性所有的订阅者. dep就是发布者
+          // const w1 = new Watcher('watcher1')
+          // dep.addSub(w1)
+          return value
+        },
+        set(newValue){
+          console.log('监听obj的改变')
+          //注意: 不是obj[key] = newValue, 否则会造成无限循环,
+          //      因为obj[key] = newValue本身又在调用set方法
+          value = newValue
+          // 发布者发布更新,通知订阅者去update
+          dep.notify()
+        }
+      })
+    })
+    //发布者订阅者模式
+    //发布者
+    class Dep {
+      constructor(){
+        this.subs = []
+      }
+      addSub(watcher){
+        this.subs.push(watcher)
+      }
+      notify(){
+        this.subs.forEach(item => {
+          item.update()
+        })
+      }
+    }
+    //订阅者
+    class Watcher {
+      constructor(name){
+        this.name = name;
+      }
+      update(){
+        console.log(this.name + '发生了update');
+      }
+    }
+    const dep = new Dep()
+
+    const w1 = new Watcher('watcher1')
+    dep.addSub(w1)
+    const w2 = new Watcher('watcher2')
+    dep.addSub(w2)
+    const w3 = new Watcher('watcher3')
+    dep.addSub(w3)
+
+    dep.notify()
+  </script>
+  
+  <script src="./VUE.js"></script>
+  <script>
+    const app = new Vue({
+      el:'#app',
+      data:{
+        message: '哈哈哈',
+        name: '测试'
+      }
+    })
+  </script>
+ 
+  </script>
+</body>
+
+</html>
