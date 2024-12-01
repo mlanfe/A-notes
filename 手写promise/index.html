@@ -1,0 +1,72 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Document</title>
+</head>
+<body>
+  <!-- <script src="./lib/promise.js"></script> -->
+  <script>
+    new Promise(resolve => {
+      resolve(2)
+      console.log('===============');
+    }).then(res => {
+      console.log('==============1', res);
+    })
+
+    
+    // const _then = Promise.prototype.then
+
+    // Promise.prototype.then = function(...args) {
+    //   console.log('============then执行')
+    //   _then.call(this, ...args);
+    // }
+    
+    // Promise.resolve(2).then(res=>{
+    //   console.log('==============3', res);
+    // }).then(res=>{
+    //   console.log('==============4', res);
+    //   return 5
+    // }).then(()=>{
+    //   console.log('==============5', res);
+    // }).catch(err=>{
+    //   console.log('==============6', err);
+    //   console.log(aaaaaaaaaa);
+    // }).catch(err=>{
+    //   console.log('==============7', err);
+    //   return 8
+    // }).then(res=>{
+    //   console.log('==============8', res);
+    // })
+
+    // Promise.resolve(2).then(()=>{
+    //   console.log('==============3', res);
+    // }).then(res=>{
+    //   console.log('==============4', res);
+    //   return 5
+    // }).catch(err=>{
+    //   console.log('==============7', err);
+    //   return 8
+    // })
+
+    // new Promise(resolve => {
+    //   resolve(2)
+    // }).then(res => {
+    //   console.log('res', res)
+    // }).then(res => {
+    //   console.log('res', res)
+    //   throw new Error('error')
+    // }).catch(err =>{
+    //   console.log('err', err)
+
+    // })
+
+    // 先后绑定回调函数的问题: 如果是后绑定回调函数,当状态
+    // 改变是, 是否会调用回调函数
+    // console.log('==============测试是否异步执行')
+  </script>
+
+</body>
+</html>
