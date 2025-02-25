@@ -101,6 +101,29 @@
 
     
 
+### LINQ
+
+1. 编译器会把LINQ查询转化为方法调用, 并在运行时调用扩展方法
+2. LINQ为IEnumberable\<T\>接口提供了各种扩展方法
+3. 查询表达式必须以from开头, 以select或group结束. 在中间可以使用where, join, orderby,let和其他from子句
+4. LINQ语句在定义时不会执行, 在迭代数据项时才会运行. 所以迭代时, 数据源发生变化, 迭代的结果也会发生改变. 
+   要让迭代结果不在随着数据源的变化而变化, 可以调用扩展方法ToArray(), ToList()等
+
+#### 1. 扩展方法
+
+存在变量bar是IEnumerable 类型;
+
+1. bar .**where(x, index)**: index可选; LINQ语句无法使用index参数
+2. 类型筛选: bar.**OfType\<T\>**(): 只有扩展方法, 没有对应的LINQ语句
+3. 复合的from子句: 编译器将复合的from子句和LINQ查询转化为SelectMany()扩张方法
+4. 复合的**from**子句: 编译器把复合的from子句转换为**SelectMany()**方法
+5. 排序
+   - **Orderby** x => **OrderBy**()
+   - **Orderby** x **descending** => **OrderByDescending**()
+   - **OrderBy** x, y,z => OrderBy(x).**ThenBy(y)**.ThenBy(z)
+
+
+
 
 
 ### 类
