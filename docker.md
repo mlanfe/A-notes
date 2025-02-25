@@ -1,5 +1,20 @@
 ## Docker
 
+ques:
+
+1. why docker
+2. docker vs vitual machine
+3. install docker locally
+4. images vs containers
+5. public and private registries
+6. run containers
+7. create own image (Dockerfile)
+8. main docker commands
+9. image versioning
+10. docker workflow big picture
+
+
+
 
 
 Docker vs Virtual Machine
@@ -99,7 +114,43 @@ this allows us to run the same app running on the same port multiple times
 
 
 
-**Port B inding**: bind the container's port to the host's port to make the service available to the outside world
+**Port Binding**: bind the container's port to the host's port to make the service available to the outside world
+
+
+
+
+
+
+
+docker registry vs docker repository
+
+1. docker registry
+   - a service providing storage
+   - collection of repositories
+2. docker repository
+   - collection of related images with same name but different versions
+
+
+
+Dockerfile:
+
+1. Dockerfiles start from a parent image ort 'base image'
+
+2. **FROM**
+
+   - build this image from the specified image
+
+3. **RUN**
+
+   - will execute any command in a shell **inside **the container envrionment
+
+4. **CMD**
+
+   1. 当container启动后会执行的命令
+
+   1. 每个Dockerfile只有一个CMD
+
+
 
 
 
@@ -117,38 +168,33 @@ this allows us to run the same app running on the same port multiple times
 
 3. run as docker container
 
+4. demo: 
+
+   1. 配置Dockerfile
+
+      ```dockerfile
+      FROM node
+      
+      WORKDIR /app
+      
+      COPY package.json .
+      COPY src ./src
+      
+      RUN ls -la ./src
+      
+      RUN npm install
+      
+      CMD [ "node", "./src/index.js" ]
+      
+      ```
 
 
+   2. 生成image
 
+      在dockerfile所在的目录下执行**docker build -t node-app:1.0**
+      -t是--tag的缩写, 指定了image的版本和名字
 
-
-
-demo: 
-
-1. 配置Dockerfile
-
-   ```dockerfile
-   FROM node
-   
-   WORKDIR /app
-   
-   COPY package.json .
-   COPY src ./src
-   
-   RUN ls -la ./src
-   
-   RUN npm install
-   
-   CMD [ "node", "./src/index.js" ]
-   
-   ```
-
-2. 生成image
-
-   在dockerfile所在的目录下执行**docker build -t node-app:1.0**
-   -t是--tag的缩写, 指定了image的版本和名字
-
-3. 接下来就可以像运行其他image一样运行node-app了
+   3. 接下来就可以像运行其他image一样运行node-app了
 
 
 
