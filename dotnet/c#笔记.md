@@ -140,7 +140,87 @@
 
    虽然在某些情况下，`sealed` 可能看起来与 `abstract` 或 `virtual` 有些重复，但它们的使用场景是不同的。`sealed` 的主要作用是限制继承和重写，以确保类或成员的最终性。当你想要阻止进一步的继承或修改时，可以使用 `sealed` 关键字。在设计类和继承关系时，这些关键字可以帮助你明确你的意图，从而更好地控制代码的行为。
 
+### 构建
+
+.NET 提供了一些 **默认的主机构建机制**，特别是在使用 `WebApplication.CreateBuilder()` 或 `Host.CreateDefaultBuilder()` 的场景中。即使开发者没有显示调用，框架底层也会自动按照默认配置构建一个主机。
+
+**2. ASP.NET Core 中的默认行为**
+
+如果你使用的是 **WebApplication** 类，以下代码：
+
+```
+csharpCopy codevar builder = WebApplication.CreateBuilder(args);
+var app = builder.Build();
+app.Run();
+```
+
+实际上已经隐式地执行了以下几步：
+
+1. 创建并配置 `HostBuilder`。
+2. 注册默认的服务集合，包括日志记录（`ILogger`）、配置（`IConfiguration`）和依赖注入（`IServiceProvider`）。
+3. 创建一个默认的 `Kestrel` Web 服务器。
+4. 加载默认的配置来源（如 `appsettings.json`、环境变量、命令行参数等）。
+5. 最终生成一个 `WebApplication` 对象并运行。
+
+**对应等效代码（伪实现）**：
+
+```
+csharpCopy codevar hostBuilder = Host.CreateDefaultBuilder(args)  // 创建默认主机构建器
+    .ConfigureServices((context, services) =>
+    {
+        // 注册默认服务（如日志、配置等）
+    })
+    .ConfigureWebHostDefaults(webBuilder =>
+    {
+        // 使用 Kestrel 服务器
+        webBuilder.UseKestrel();
+        webBuilder.UseStartup<Startup>();
+    });
+
+var host = hostBuilder.Build();
+await host.RunAsync();
+```
+
+框架为你隐式处理了大量基础工作，简化了开发流程。
+
+### Dependency Injection
+
+由.net自动注入的依赖
+
+**IOption**
+
+**IHttpContextAccessor**
+
+**IServiceProvider**
+
+**IConfiguration**
+
+**ILogger\<TCategoryName>**
+
+ **IWebHostEnvironment / IHostEnvironment**
+
+**CancellationToken**
+
+**ApplicationLifetime 服务**
+
+- **服务接口**：
+  - **IHostApplicationLifetime**：应用程序生命周期事件。
+  - **IWebHostApplicationLifetime**：专用于 Web 的生命周期事件（仅限 Web 应用
 
 
 
+### 配置外键约束在执行删除操作时的行为
+
+`Microsoft.EntityFrameworkCore.DeleteBehavior` 枚举用于配置外键约束在执行删除操作时的行为。
+
+#### 比较总结
+
+| 枚举类型          | 数据库约束           | 是否级联删除 | 子表字段变 `NULL` | 删除限制 | 适用场景                             |
+| ----------------- | -------------------- | ------------ | ----------------- | -------- | ------------------------------------ |
+| **Cascade**       | `ON DELETE CASCADE`  | 是           | 否                | 否       | 强依赖关系，如订单和订单明细         |
+| **Restrict**      | `ON DELETE RESTRICT` | 否           | 否                | 是       | 需要防止误删除主表记录，如用户和订单 |
+| **SetNull**       | `ON DELETE SET NULL` | 否           | 是                | 否       | 弱依赖关系，如分类和产品             |
+| **NoAction**      | 无显式约束           | 否           | 否                | 是       | 自定义删除逻辑                       |
+| **ClientSetNull** | 内存行为             | 否           | 是                | 否       | 内存中设置外键 `NULL`                |
+| **ClientCascade** | 内存行为             | 是           | 否                | 否       | 内存中级联删除                       |
 

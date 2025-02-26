@@ -856,7 +856,26 @@ class LibCardComponent implement AfterContentInit {
 ```
 
 
+## **NgRx Store**
 
+NgRx（Angular Redux）是一个基于 **Redux** 和 **RxJS** 的 **状态管理库**，适用于 **Angular 应用**，主要用于管理全局状态，帮助构建可预测的、可测试的、可扩展的应用程序。
+
+#### **核心概念**
+
+NgRx 主要由以下核心概念组成：
+
+| NgRx 概念    | 作用                         | 类比 RxJS                                 |
+| ------------ | ---------------------------- | ----------------------------------------- |
+| **Store**    | 全局状态管理                 | `BehaviorSubject`（可订阅的状态流）       |
+| **Action**   | 触发状态变更的事件           | `Subject.next()`（事件流）                |
+| **Reducer**  | 纯函数，定义如何处理状态变化 | `scan()`（累积状态）                      |
+| **Selector** | 选取 Store 中的数据          | `map()`（转换数据）                       |
+| **Effect**   | 处理异步操作，如 API 请求    | `switchMap()`、`mergeMap()`（处理副作用） |
+
+- 创建store
+  创建action, 可以dispatch action来通知reducer更新store
+  创建reducer, reducer监听action, 来更新store
+  创建selector, 来订阅store的部分数据(减少更新检测的范围), 可以对store的数据做处理并返回处理后的数据(不修改原数据)
 
 
 
